@@ -45,5 +45,6 @@ while True:
         tup4 = float(info[3])
 
         data = (tup1, tup2, tup3, tup4)
+        print(data)
 
         mb.sleep(10)
