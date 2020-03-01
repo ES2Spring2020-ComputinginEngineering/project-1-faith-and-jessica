@@ -47,7 +47,10 @@ while True:
 
         data = (tup1, tup2, tup3, tup4)
         print(data)
-        fout.write(data)
+        fout.write(tup1)
+        fout.write(tup2)
+        fout.write(tup3)
+        fout.write(tup4)
         fout.write('\n')
 
         mb.sleep(10)
