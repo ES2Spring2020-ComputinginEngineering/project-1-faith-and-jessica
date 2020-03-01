@@ -18,7 +18,7 @@ radio.config(channel=5, length =100)
 print('Program Started')
 mb.display.show(mb.Image.HAPPY, delay=1000, clear=True)
 
-
+fout = open('data.txt.', 'w')
 # Wait for start message before beginning printing
 incoming = ''
 while not incoming == 'start':
@@ -46,5 +46,9 @@ while True:
 
         data = (tup1, tup2, tup3, tup4)
         print(data)
+        fout.write(data)
+        fout.write('\n')
 
         mb.sleep(10)
+
+fout.close()
