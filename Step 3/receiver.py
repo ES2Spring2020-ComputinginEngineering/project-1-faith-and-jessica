@@ -12,8 +12,9 @@ import microbit as mb
 import radio  # Needs to be imported separately
 import os
 
-# change current directory
-os.chdir("/'C:/users/draw6/documents/github/'project-1-faith-and-jessica-master")
+path='C:/users/draw6/documents/github/project-1-faith-and-jessica/Step 3'
+os.chdir(path)  #Error saying that 'chdir' is not an attribute of 'module'
+
 # Change the channel if other microbits are interfering. (Default=7)
 radio.on()  # Turn on radio
 radio.config(channel=5, length =100)
@@ -21,7 +22,8 @@ radio.config(channel=5, length =100)
 print('Program Started')
 mb.display.show(mb.Image.HAPPY, delay=1000, clear=True)
 
-fout = open('data.txt', 'w')
+fout = open('pendulum.txt', 'w')
+print("file opened")
 # Wait for start message before beginning printing
 incoming = ''
 while not incoming == 'start':
@@ -43,6 +45,7 @@ while True:
         info = incoming.split()
         for elem in info:
             fout.write(elem)
+            print("element added to text file")
             fout.write(' ')
         fout.write('\n')
 
@@ -55,6 +58,6 @@ while True:
         data = (tup1, tup2, tup3, tup4)
         print(data)
 
-        mb.sleep(10)
+        mb.sleep(100)
 
-fout.close()
+    fout.close()
