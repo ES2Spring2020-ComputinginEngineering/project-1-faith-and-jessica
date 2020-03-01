@@ -42,7 +42,7 @@ while True:
         tup1 = float(info[0])
         tup2 = float(info[1])
         tup3 = float(info[2])
-        tup4 = float(info[3])
+        tup4 = float(info[3])/1000
 
         data = (tup1, tup2, tup3, tup4)
         print(data)
