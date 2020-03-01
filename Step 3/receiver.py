@@ -39,6 +39,11 @@ while True:
         # Need to parse it and reformat as a tuple for the MU plotter
         #############################################################
         info = incoming.split()
+        for elem in info:
+            fout.write(elem)
+            fout.write(' ')
+        fout.write('\n')
+
 
         tup1 = float(info[0])
         tup2 = float(info[1])
@@ -47,11 +52,6 @@ while True:
 
         data = (tup1, tup2, tup3, tup4)
         print(data)
-        fout.write(tup1)
-        fout.write(tup2)
-        fout.write(tup3)
-        fout.write(tup4)
-        fout.write('\n')
 
         mb.sleep(10)
 
