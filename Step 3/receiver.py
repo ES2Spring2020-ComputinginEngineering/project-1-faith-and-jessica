@@ -1,5 +1,11 @@
 ##################
-# FILL IN HEADER
+# Project 1
+# Step 3
+# Receiver.py
+#
+#
+# Jessica Nordlund
+# Faith Seely
 #################
 
 import microbit as mb
@@ -7,7 +13,7 @@ import radio  # Needs to be imported separately
 
 # Change the channel if other microbits are interfering. (Default=7)
 radio.on()  # Turn on radio
-radio.config(channel=7, length =100)
+radio.config(channel=5, length =100)
 
 print('Program Started')
 mb.display.show(mb.Image.HAPPY, delay=1000, clear=True)
@@ -25,11 +31,19 @@ while True:
 
     if incoming is not None: # message was received
         mb.display.show(mb.Image.HEART, delay=100, clear=True, wait=False)
-        
+
         #############################################################
         # FILL IN HERE
         # Incoming is string sent from logger
         # Need to parse it and reformat as a tuple for the MU plotter
         #############################################################
+        info = incoming.split()
+
+        tup1 = float(info[0])
+        tup2 = float(info[1])
+        tup3 = float(info[2])
+        tup4 = float(info[3])
+
+        data = (tup1, tup2, tup3, tup4)
 
         mb.sleep(10)

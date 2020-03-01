@@ -1,5 +1,11 @@
 ##################
-# FILL IN HEADER
+# Project 1
+# Step 3
+# Logger.py
+#
+#
+# Jessica Nordlund
+# Faith Seely
 #################
 
 import microbit as mb
@@ -7,7 +13,7 @@ import radio  # Needs to be imported separately
 
 # Change the channel if other microbits are interfering. (Default=7)
 radio.on()  # Turn on radio
-radio.config(channel=7, length=100)
+radio.config(channel=5, length=100)
 
 print('Program Started')
 mb.display.show(mb.Image.HAPPY)
@@ -28,6 +34,13 @@ while not mb.button_a.is_pressed():
     # Need to format into a single string
     # Send the string over the radio
     ######################################################
+    x = microbit.accelerometer.get_x()
+    y = microbit.accelerometer.get_y()
+    z = microbit.accelerometer.get_z()
+    rel_time = microbit.running_time()
+
+    message = str(x) + " " + str(y) + " " + str(z) + " " + str(rel_time)
+
 
     radio.send(message)
     mb.sleep(10)
