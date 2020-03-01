@@ -12,6 +12,8 @@ import microbit as mb
 import radio  # Needs to be imported separately
 import os
 
+# change current directory
+os.chdir("/'C:/users/draw6/documents/github/'project-1-faith-and-jessica-master")
 # Change the channel if other microbits are interfering. (Default=7)
 radio.on()  # Turn on radio
 radio.config(channel=5, length =100)
