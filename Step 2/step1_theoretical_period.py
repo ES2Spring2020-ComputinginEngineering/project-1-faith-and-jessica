@@ -1,6 +1,19 @@
 # Project 1
 # Step 2
 # Theoretical Based Equation Model
+#
+# Jessica Nordlund 
+# Faith Seely
+#
+#
+# While this model follows the theoretical equation T = 2pi(L/g)^1/2, this 
+# equation does not account for friction or air resistance. It also assumes 
+# all the mass of the pendelum is at the end of the string when in reality the
+# string also has mass and its own gravitational pull. This means that the 
+# model can only be so accurate and does not fully represent the real pendelum 
+# we built.
+# 
+##################################
 
 # IMPORT STATEMENTS
 ##################################
@@ -31,10 +44,10 @@ def estimatedPeriod(lens):
 # paramter: numpy array of lengths of pendulum and numpy of periods
 # return:   void
 def graphValues(lens, periods):
-    plt.plot(periods, lens, "ro")
+    plt.plot(periods, lens, "-bo")
     plt.ylabel("Length (inches)")
     plt.xlabel("Period (s)")
-    #plt.axis(0,15,0,22)
+    plt.title("Pendelum Length vs Period")
     plt.show()
 
 # MAIN SCRIPT
@@ -42,3 +55,5 @@ def graphValues(lens, periods):
 lengths = np.array([5,9,13,17,21])
 periods = estimatedPeriod(lengths)
 graphValues(lengths,periods)
+print("Estimated periods (s): ")
+print(periods)
