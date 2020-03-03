@@ -47,7 +47,7 @@ def graphValues(lens, periods):
     plt.plot(periods, lens, "-bo")
     plt.ylabel("Length (inches)")
     plt.xlabel("Period (s)")
-    plt.title("Pendelum Length vs Period")
+    plt.title("Pendulum Length vs Period")
     plt.show()
 
 # MAIN SCRIPT
