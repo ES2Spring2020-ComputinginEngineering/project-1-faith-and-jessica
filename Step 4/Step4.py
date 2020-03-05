@@ -136,7 +136,7 @@ def calcTheta(accelerations, length):
 # return:   void
 def graphTheta(theta, time):
     plt.plot(time, theta, "b")
-    plt.ylabel("Angular Position (radians)")
+    plt.ylabel("Angular Position (degrees)")
     plt.xlabel("Time (s)")
     plt.title("Pendulum Acceleration vs Time")
     plt.show()
