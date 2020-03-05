@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import csv
+import pandas
 
 
 
@@ -24,15 +25,20 @@ import csv
 #           global variable
 # paramter: filename to get data from
 # return:   void
-def getData(filename):
-    acc_x = np.empty(0, dtype=float)
-    times = np.empty(0, dtype=float)
+def getData(filename, accelerations, times): 
+    emptyArray = np.empty(0, dtype=float)
+    #raw_data = pandas.read_csv(filename)
+    raw_data = open(filename)
+    data_csv = csv.reader(raw_data)
     
-    with open(filename, newline='') as csvfile:
-        raw_data = csv.reader(csvfile, delimiter=' ', quotechar='|')
-        for row in raw_data:
-            acc_x = np.append(acc_x, {row[0]})  #out of index error
-            times = np.append(times, {row[3]})  #out of index error
+    for row in data_csv:
+        if (row != emptyArray):
+            accelerations = np.append(accelerations, {row[0]})  
+            times         = np.append(times, {row[3]})  
+        print (row)
+        
+    print(accelerations)
+    print(times)
 
         
 
@@ -83,7 +89,11 @@ def calcPeriod():
 
 # MAIN SCRIPT
 ###################################
-getData('Pendulum21.csv')
-graphAcc(acc_x,times)
+acc_x = np.empty(0, dtype=float)
+time  = np.empty(0, dtype=float)
+getData('Pendulum21.csv', acc_x, time)
+print(acc_x)
+print(time)
+#graphAcc(acc_x,times)
 #thetas = calcTheta(acc_x)
 #graphTheta(thetas,times)
