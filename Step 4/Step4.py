@@ -13,33 +13,44 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import csv
-import pandas
 
 
 
 # CUSTOM FUNCTION DEFINITIONS
 ###################################
 
-# function: getData
-# purpose:  gets the raw data from a file and puts the data in corresponding
-#           global variable
-# paramter: filename to get data from
-# return:   void
-def getData(filename, accelerations, times): 
-    emptyArray = np.empty(0, dtype=float)
-    #raw_data = pandas.read_csv(filename)
+# function: getAcc
+# purpose:  gets the x acceleration from the given file and returns it as an
+#           array
+# paramter: filename (where data is located)
+# return:   array of x accelerations
+def getAcc(filename): 
+    acc_x    = np.empty(0, dtype=float)
     raw_data = open(filename)
     data_csv = csv.reader(raw_data)
     
     for row in data_csv:
-        if (row != emptyArray):
-            accelerations = np.append(accelerations, {row[0]})  
-            times         = np.append(times, {row[3]})  
-        print (row)
+        if (len(row) != 0):
+            acc_x = np.append(acc_x, row[0])  
+    
+    return acc_x
         
-    print(accelerations)
-    print(times)
 
+# function: getTime
+# purpose:  gets the time stamps from the given file and returns them as an
+#           array
+# paramter: filename (where data is located)
+# return:   array of times
+def getTime(filename): 
+    times    = np.empty(0, dtype=float)
+    raw_data = open(filename)
+    data_csv = csv.reader(raw_data)
+    
+    for row in data_csv:
+        if (len(row) != 0):
+            times = np.append(times, row[3])  
+    
+    return times
         
 
 # function: graphAcc
@@ -48,11 +59,10 @@ def getData(filename, accelerations, times):
 # paramter: numpy array of accelerations (milli-g) of pendulum and numpy of 
 #           time (seconds)
 # return:   void
-#
-# Due to the way our microbit is oriented, the acceleration is the 
-# acceleration along the x-axis.
 def graphAcc(accs,time):
-    plt.plot(time, accs, "-bo")
+    x = time.astype(np.float)   #from array of strings to floats
+    y = accs.astype(np.float)   #from array of strings to floats
+    plt.plot(x, y, "-bo")
     plt.ylabel("Acceleration (milli-g)")
     plt.xlabel("Time (s)")
     plt.title("Pendulum Acceleration vs Time")
@@ -89,11 +99,11 @@ def calcPeriod():
 
 # MAIN SCRIPT
 ###################################
-acc_x = np.empty(0, dtype=float)
-time  = np.empty(0, dtype=float)
-getData('Pendulum21.csv', acc_x, time)
+
+acc_x = getAcc('Pendulum21.csv')
+time  = getTime('Pendulum21.csv')
 print(acc_x)
 print(time)
-#graphAcc(acc_x,times)
+graphAcc(acc_x,time)
 #thetas = calcTheta(acc_x)
 #graphTheta(thetas,times)
