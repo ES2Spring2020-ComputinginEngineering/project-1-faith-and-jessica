@@ -70,11 +70,14 @@ def graphAcc(accs,time):
     
 # function: calcTheta
 # purpose:  finds the theta values from a given set of accelerations
-# paramter: numpy array of accelerations
+# paramter: numpy array of accelerations, length of pendulum
 # return:   numpy array of angular positions
-def calcTheta(accelerations):
-    # THETA CALC
-    return 0
+def calcTheta(accelerations, length):
+    accs = accelerations.astype(np.float)
+    thetas = np.arctan(np.divide(accs,length))
+    
+    return thetas
+    
     
 # function: graphTheta
 # purpose:  takes an array of angular positions and an array of times 
@@ -83,7 +86,9 @@ def calcTheta(accelerations):
 #           time (seconds)
 # return:   void
 def graphTheta(theta, time):
-    plt.plot(time, theta, "-bo")
+    x = time.astype(np.float)   #from array of strings to floats
+    y = theta.astype(np.float)  #from array of strings to floats
+    plt.plot(x, y, "-bo")
     plt.ylabel("Angular Position (radians)")
     plt.xlabel("Time (s)")
     plt.title("Pendulum Acceleration vs Time")
@@ -93,17 +98,44 @@ def graphTheta(theta, time):
 # purpose:  finds the period of the pendulum
 # paramter: TODO
 # return:   TODO
-def calcPeriod():
-    # PERIOD CALC
-    return 0
+def calcPeriod(acc, time):
+    acc  = acc.astype(np.float)   #from array of strings to floats
+    time = time.astype(np.float)  #from array of strings to floats
+    periods = np.empty(0, dtype=float)
+    
+    for i in range(1,len(acc)):
+        if (acc[i-1] > 0 and acc[i] < 0):
+            periods = np.append(periods, (time[i-1] + time[i])/2)
+            
+    avg_period = 0
+    for elem in periods:
+        avg_period = avg_period + elem
+        
+    return avg_period / len(periods)
 
 # MAIN SCRIPT
 ###################################
 
-acc_x = getAcc('Pendulum21.csv')
-time  = getTime('Pendulum21.csv')
-print(acc_x)
-print(time)
-graphAcc(acc_x,time)
-#thetas = calcTheta(acc_x)
-#graphTheta(thetas,times)
+acc_x21 = getAcc('Data21.csv')
+time21  = getTime('Data21.csv')
+#graphAcc(acc_x21,time21)
+
+acc_x17 = getAcc('Data17.csv')
+time17  = getTime('Data17.csv')
+#graphAcc(acc_x17,time17)
+
+acc_x13 = getAcc('Data13.csv')
+time13  = getTime('Data13.csv')
+#graphAcc(acc_x13,time13)
+
+acc_x9 = getAcc('Data9.csv')
+time9  = getTime('Data9.csv')
+#graphAcc(acc_x9,time9)
+
+acc_x5 = getAcc('Data475.csv')
+time5  = getTime('Data475.csv')
+#graphAcc(acc_x5,time5)
+thetas21 = calcTheta(acc_x21, 21.0)
+graphTheta(thetas21,time21)
+period = calcPeriod(acc_x21,time21)
+print(period)
