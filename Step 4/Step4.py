@@ -13,18 +13,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import csv
+import scipy.signal
 
 
 
 # CUSTOM FUNCTION DEFINITIONS
 ###################################
 
-# function: getAcc
+# function: getAccX
 # purpose:  gets the x acceleration from the given file and returns it as an
 #           array
 # paramter: filename (where data is located)
-# return:   array of x accelerations
-def getAcc(filename): 
+# return:   array of x accelerations (floats)
+def getAccX(filename): 
     acc_x    = np.empty(0, dtype=float)
     raw_data = open(filename)
     data_csv = csv.reader(raw_data)
@@ -33,14 +34,49 @@ def getAcc(filename):
         if (len(row) != 0):
             acc_x = np.append(acc_x, row[0])  
     
-    return acc_x
+    acc_x = acc_x.astype(np.float)     #from array of strings to floats
+    return scipy.signal.medfilt(acc_x)
+
+# function: getAccY
+# purpose:  gets the y acceleration from the given file and returns it as an
+#           array
+# paramter: filename (where data is located)
+# return:   array of y accelerations (floats)
+def getAccY(filename): 
+    acc_y    = np.empty(0, dtype=float)
+    raw_data = open(filename)
+    data_csv = csv.reader(raw_data)
+    
+    for row in data_csv:
+        if (len(row) != 0):
+            acc_y = np.append(acc_y, row[1])  
+    
+    acc_y = acc_y.astype(np.float)     #from array of strings to floats
+    return scipy.signal.medfilt(acc_y)
+
+# function: getAccZ
+# purpose:  gets the z acceleration from the given file and returns it as an
+#           array
+# paramter: filename (where data is located)
+# return:   array of z accelerations (floats)
+def getAccZ(filename): 
+    acc_z    = np.empty(0, dtype=float)
+    raw_data = open(filename)
+    data_csv = csv.reader(raw_data)
+    
+    for row in data_csv:
+        if (len(row) != 0):
+            acc_z = np.append(acc_z, row[2])  
+    
+    acc_z = acc_z.astype(np.float)     #from array of strings to floats
+    return scipy.signal.medfilt(acc_z)
         
 
 # function: getTime
 # purpose:  gets the time stamps from the given file and returns them as an
 #           array
 # paramter: filename (where data is located)
-# return:   array of times
+# return:   array of times (floats)
 def getTime(filename): 
     times    = np.empty(0, dtype=float)
     raw_data = open(filename)
@@ -50,23 +86,36 @@ def getTime(filename):
         if (len(row) != 0):
             times = np.append(times, row[3])  
     
+    times = times.astype(np.float)     #from array of strings to floats
     return times
         
 
 # function: graphAcc
-# purpose:  takes an array of accelerations and an array of time of a pendulum 
+# purpose:  takes 3 arrays of accelerations and an array of time of a pendulum 
 #           and graphs the variables (accelerations vs time)
-# paramter: numpy array of accelerations (milli-g) of pendulum and numpy of 
+# paramter: numpy arrays of accelerations (milli-g) of pendulum and numpy of 
 #           time (seconds)
 # return:   void
-def graphAcc(accs,time):
-    x = time.astype(np.float)   #from array of strings to floats
-    y = accs.astype(np.float)   #from array of strings to floats
-    plt.plot(x, y, "-bo")
-    plt.ylabel("Acceleration (milli-g)")
+def graphAcc(acc_x, acc_y, acc_z,time):    
+    plt.subplot(311)
+    plt.plot(time, acc_x, "b")
     plt.xlabel("Time (s)")
     plt.title("Pendulum Acceleration vs Time")
+    plt.legend('X')
+    
+    plt.subplot(312)
+    plt.plot(time, acc_y, "r")
+    plt.ylabel("Acceleration (milli-g)")
+    plt.xlabel("Time (s)")
+    plt.legend('Y')
+    
+    plt.subplot(313)
+    plt.plot(time, acc_z, "g")
+    plt.xlabel("Time (s)")
+    plt.legend('Z')
+
     plt.show()
+    
     
 # function: calcTheta
 # purpose:  finds the theta values from a given set of accelerations
@@ -75,8 +124,8 @@ def graphAcc(accs,time):
 def calcTheta(accelerations, length):
     accs = accelerations.astype(np.float)
     thetas = np.arctan(np.divide(accs,length))
-    
-    return thetas
+ 
+    return scipy.signal.medfilt(thetas)
     
     
 # function: graphTheta
@@ -86,26 +135,26 @@ def calcTheta(accelerations, length):
 #           time (seconds)
 # return:   void
 def graphTheta(theta, time):
-    x = time.astype(np.float)   #from array of strings to floats
-    y = theta.astype(np.float)  #from array of strings to floats
-    plt.plot(x, y, "-bo")
+    plt.plot(time, theta, "b")
     plt.ylabel("Angular Position (radians)")
     plt.xlabel("Time (s)")
     plt.title("Pendulum Acceleration vs Time")
     plt.show()
     
+    
 # function: calcPeriod
 # purpose:  finds the period of the pendulum
-# paramter: TODO
-# return:   TODO
+# paramter: numpy array of accelerations and numpy array of times 
+# return:   float (calculated period)
 def calcPeriod(acc, time):
-    acc  = acc.astype(np.float)   #from array of strings to floats
-    time = time.astype(np.float)  #from array of strings to floats
     periods = np.empty(0, dtype=float)
+    last_p  = 0
     
     for i in range(1,len(acc)):
         if (acc[i-1] > 0 and acc[i] < 0):
-            periods = np.append(periods, (time[i-1] + time[i])/2)
+            new_p   = (time[i-1] + time[i])/2
+            periods = np.append(periods, new_p - last_p)
+            last_p  = new_p
             
     avg_period = 0
     for elem in periods:
@@ -113,29 +162,49 @@ def calcPeriod(acc, time):
         
     return avg_period / len(periods)
 
+
+
+# function: displayData
+# purpose:  displays accelerations vs time graphs and angle vs time graphs 
+#           from the data given, also prints calculated period
+# paramter: filename of where data for pendulum is stored (.csv) and string
+#           of length of pendulum (inches)
+# return:   void
+def displayData(file, length):
+    print('GETTING DATA FOR PENDULUM WITH LENGTH OF ', length, ' INCHES')
+    acc_x = getAccX(file)
+    acc_y = getAccY(file)
+    acc_z = getAccZ(file)
+    time  = getTime(file)
+    graphAcc(acc_x,acc_y,acc_z,time)
+    thetas = calcTheta(acc_x, float(length))
+    graphTheta(thetas,time)
+    period = calcPeriod(acc_x,time)
+    print('Calculated Period: ', period)
+    print('\n\n\n')
+    
+    
+# function: display
+# purpose:  displays accelerations vs time graphs and angle vs time graphs 
+#           from the data for 5 different length pendulums, also prints 
+#           calculated period
+# paramter: filenames of where data for each pendulum is stored (.csv)
+#           file1 = 21 inches
+#           file2 = 17 inches
+#           file3 = 13 inches
+#           file4 = 9 inches
+#           file5 = 4.75 inches 
+# return:   void
+def display(file1, file2, file3, file4, file5):
+    displayData(file1, '21')
+    displayData(file2, '17')
+    displayData(file3, '13')
+    displayData(file4, '9')
+    displayData(file5, '4.75')
+
+
 # MAIN SCRIPT
 ###################################
 
-acc_x21 = getAcc('Data21.csv')
-time21  = getTime('Data21.csv')
-#graphAcc(acc_x21,time21)
-
-acc_x17 = getAcc('Data17.csv')
-time17  = getTime('Data17.csv')
-#graphAcc(acc_x17,time17)
-
-acc_x13 = getAcc('Data13.csv')
-time13  = getTime('Data13.csv')
-#graphAcc(acc_x13,time13)
-
-acc_x9 = getAcc('Data9.csv')
-time9  = getTime('Data9.csv')
-#graphAcc(acc_x9,time9)
-
-acc_x5 = getAcc('Data475.csv')
-time5  = getTime('Data475.csv')
-#graphAcc(acc_x5,time5)
-thetas21 = calcTheta(acc_x21, 21.0)
-graphTheta(thetas21,time21)
-period = calcPeriod(acc_x21,time21)
-print(period)
+display('Data21.csv', 'Data17.csv', 'Data13.csv', 'Data9.csv', 
+                                                      'Data475.csv')
