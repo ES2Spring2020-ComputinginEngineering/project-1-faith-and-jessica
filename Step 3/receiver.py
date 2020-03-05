@@ -63,4 +63,4 @@ while True:
         data = (tup1, tup2, tup3, tup4)
         print(data)
 
-        mb.sleep(100)
+        mb.sleep(10)
