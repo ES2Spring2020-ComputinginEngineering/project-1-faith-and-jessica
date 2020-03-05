@@ -12,11 +12,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import csv
 
-# GLOBAL VARIABLES
-###################################
- acc_x = np.empty(dtype=float)
- times = np.empty(dtype=float)
+
 
 # CUSTOM FUNCTION DEFINITIONS
 ###################################
@@ -27,15 +25,16 @@ import os
 # paramter: filename to get data from
 # return:   void
 def getData(filename):
-    fin   = open(filename)
+    acc_x = np.empty(0, dtype=float)
+    times = np.empty(0, dtype=float)
     
-    while(fin.readline()):
-        raw_line = fin.readline()
-        raw_nums = raw_line.split()
-        accs.append(raw_nums[0])
-        times.append(raw_nums[3])
+    with open(filename, newline='') as csvfile:
+        raw_data = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        for row in raw_data:
+            acc_x = np.append(acc_x, {row[0]})  #out of index error
+            times = np.append(times, {row[3]})  #out of index error
+
         
-    fin.close()
 
 # function: graphAcc
 # purpose:  takes an array of accelerations and an array of time of a pendulum 
@@ -59,7 +58,7 @@ def graphAcc(accs,time):
 # return:   numpy array of angular positions
 def calcTheta(accelerations):
     # THETA CALC
-    
+    return 0
     
 # function: graphTheta
 # purpose:  takes an array of angular positions and an array of times 
@@ -80,10 +79,11 @@ def graphTheta(theta, time):
 # return:   TODO
 def calcPeriod():
     # PERIOD CALC
+    return 0
 
 # MAIN SCRIPT
 ###################################
-getData('Pendulum21.txt')
+getData('Pendulum21.csv')
 graphAcc(acc_x,times)
-thetas = calcTheta(acc_x)
-graphTheta(thetas,times)
+#thetas = calcTheta(acc_x)
+#graphTheta(thetas,times)
