@@ -1,6 +1,7 @@
 # Project 1
 # Step 4
 # Analysis of Results
+# Graphs.py
 #
 # Jessica Nordlund 
 # Faith Seely
@@ -119,7 +120,7 @@ def graphAcc(acc_x, acc_y, acc_z,time):
     
 # function: calcTheta
 # purpose:  finds the theta values from a given set of accelerations
-# paramter: numpy array of accelerations, length of pendulum
+# paramter: numpy array of accelerations, length of pendulum (float)
 # return:   numpy array of angular positions
 def calcTheta(accelerations, length):
     accs = accelerations.astype(np.float)
@@ -183,5 +184,5 @@ def display(file1, file2, file3, file4, file5):
 # MAIN SCRIPT
 ###################################
 
-display('Data21.csv', 'Data17.csv', 'Data13.csv', 'Data9.csv', 
-                                                      'Data475.csv')
+#display('Data21.csv', 'Data17.csv', 'Data13.csv', 'Data9.csv', 
+#                                                      'Data475.csv')
