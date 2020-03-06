@@ -12,6 +12,7 @@
 ##################################
 import numpy as np
 import Graphs
+import matplotlib.pyplot as plt
 
 
 # CUSTOM FUNCTION DEFINITIONS
@@ -46,7 +47,7 @@ def calcPeriod(angles, times):
 #           file3 = 13 inches
 #           file4 = 9 inches
 #           file5 = 4.75 inches 
-# return:   5 floats (calculated periods)
+# return:   array of periods (floats)
 def calcAllPeriods(file1, file2, file3, file4, file5):
     acc21 = Graphs.getAccX(file1)
     ang21 = Graphs.calcTheta(acc21,float(21))
@@ -78,8 +79,23 @@ def calcAllPeriods(file1, file2, file3, file4, file5):
     period5 = calcPeriod(ang5,time5)
     print('Calculated period of pendulum with length of 4.75 inches:', period5)
     
+    return [period21, period17, period13, period9, period5]
+
+
+# function: graphPvL
+# purpose:  graphs period vs length of pendulums
+# paramter: numpy array of periods and corresponding lengths
+# return:   void
+def graphPvL(periods, lengths):
+    plt.plot(lengths, periods, "b")
+    plt.ylabel("Period (s)")
+    plt.xlabel("Length (inches)")
+    plt.title("Pendulum Period vs Length")
+    plt.show()
     
 # MAIN SCRIPT
 ###################################
-calcAllPeriods('Data21.csv', 'Data17.csv', 'Data13.csv', 'Data9.csv', 
-                                                      'Data475.csv')
+periods = calcAllPeriods('Data21.csv', 'Data17.csv', 'Data13.csv', 
+                                       'Data9.csv' , 'Data475.csv')
+lengths = [21.0, 17.0, 13.0, 9.0, 4.75]
+graphPvL(periods, lengths)
