@@ -139,7 +139,7 @@ def graphTheta(theta, time):
     plt.plot(time, theta, "b")
     plt.ylabel("Angular Position (radians)")
     plt.xlabel("Time (s)")
-    plt.title("Pendulum Acceleration vs Time")
+    plt.title("Angular Position vs Time")
     plt.show()
     
 
@@ -184,5 +184,5 @@ def display(file1, file2, file3, file4, file5):
 # MAIN SCRIPT
 ###################################
 
-#display('Data21.csv', 'Data17.csv', 'Data13.csv', 'Data9.csv', 
-#                                                      'Data475.csv')
+display('Data21.csv', 'Data17.csv', 'Data13.csv', 'Data9.csv', 
+                                                      'Data475.csv')
