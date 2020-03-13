@@ -11,17 +11,18 @@
 # IMPORT STATEMENTS
 ##################################
 import numpy as np
-import Graphs
 import matplotlib.pyplot as plt
 import math
+import time
 
 
 # GLOBAL VARIABLES
 ##################################
-GRAVITY  = -386.09       #inches/ses/sec
-INIT_VEL = 0
-INIT_POS = math.pi/4
-TIME     = 50           #millisec
+GRAVITY   = -386.09             #inches/ses/sec
+INIT_VEL  = 0
+INIT_POS  = math.pi/4
+INIT_TIME = time.time()*1000000 #seconds
+TIME      = 5                   #seconds
 
 # CUSTOM FUNCTION DEFINITIONS
 ###################################
@@ -34,31 +35,49 @@ def getInitAcc(length):
     return (GRAVITY/length)*math.sin(INIT_POS)
 
 
+# function: newTime
+# purpose:  adds a new time in seconds to the given array and returns new 
+# paramter: numpy array of times
+# return:   modified numpy array of times
+def newTime(times):
+    return np.append(times, time.time()*1000000)
+
 # function: newVel
 # purpose:  finds a new angular velocity given an old angular acceleration
-# paramter: numpy array of velocities and a numpy array of accelerations
+# paramter: 3 numpy arrays of velocities, accelerations, and times
 # return:   numpy array of velocities with calculated velocity added
-def newVel(accs, vels):
+def newVel(accs, vels, times):
     # old w + acc*t 
-    return 0
+    time_elapsed = times[len(times)-1] - times[len(times)-2]
+    new_vel = vels[len(vels)-1] + (accs[len(accs)-1] * time_elapsed)
+    return np.append(vels,new_vel)
+    
   
     
 # function: newPos
 # purpose:  finds a new angular position given an old angular velocity
-# paramter: numpy array of velocities and a numpy array of positions
+# paramter: 3 numpy array of velocities, positions, and times and length of 
+#           pendulum
 # return:   numpy array of positions with calculated position added
-def newPos(vels, pos):
+def newPos(vels, pos, times, length):
     # old vel*t + pi/4 + (1/2)(g/L sin (old theta) t^2), t = time step
-    return 0
+    time_elapsed = times[len(times)-1] - times[len(times)-2]
+    term1  = vels[len(vels)-1]
+    term2 = (1/2)*(GRAVITY/length)*(math.sin(pos[len(pos)-1]))
+    new_pos = math.pi/4 + term1*time_elapsed + term2*(time_elapsed)**2
+    return np.append(pos,new_pos)
     
 
 # function: newAcc
 # purpose:  finds a new angular acceleration given an old angular position
-# paramter: numpy array of positions and a numpy array of accelerations
+# paramter: numpy array of positions and a numpy array of accelerations and 
+#           the length of the pendulum
 # return:   numpy array of accelerations with calculated acceleration added
-def newAcc(pos, accs):
+def newAcc(pos, accs, times, length):
     # G/L SIN THETA
-    return 0
+    time_elapsed = times[len(times)-1] - times[len(times)-2]
+    new_acc = (GRAVITY/length) * math.sin(pos[len(pos)-1])
+    return np.append(accs,new_acc)
 
 
 # function: graphValues
@@ -66,7 +85,23 @@ def newAcc(pos, accs):
 # paramter: 4 numpy array of accelerations, velocities, positions, and times
 # return:   void
 def graphValues(accs, vels, pos, times):
-    # TO DO
+    plt.plot(time, accs, "b")
+    plt.xlabel("Time (s)")
+    plt.ylabel("Angular Accleration (radians/s^2)")
+    plt.title("Pendulum Acceleration vs Time")
+    plt.show()
+    
+    plt.plot(time, vels, "r")
+    plt.xlabel("Time (s)")
+    plt.ylabel("Angular Velocity (radians/sec)")
+    plt.title("Pendulum Velocity vs Time")
+    plt.show()
+    
+    plt.plot(time, pos, "g")
+    plt.xlabel("Time (s)")
+    plt.ylabel("Angular Position (radians)")
+    plt.title("Pendulum Position vs Time")
+    plt.show()
 
 
 # MAIN SCRIPT
@@ -75,9 +110,22 @@ for length in [21.0, 17.0, 13.0, 9.0, 4.75]:
     ang_v = [INIT_VEL]
     ang_x = [INIT_POS]
     ang_a = [getInitAcc(length)]
+    times = [INIT_TIME]
     
-    # while loop
-    # find new v from last a
-    # find new pos from last v
-    # find new a form pos
-    # graph
+    elapsed_time = 0
+    
+    while (elapsed_time < TIME):
+        times = newTime(times)
+        ang_v = newVel(ang_a,ang_v,times)
+        ang_x = newPos(ang_v,ang_x,times,length)
+        ang_a = newAcc(ang_x,ang_a,times,length)
+        
+        elapsed_time = time.time()*1000000 - INIT_TIME
+    
+    #graphValues(ang_a,ang_v,ang_x,times)
+    print(type(times))
+    print(type(ang_v))
+    print(type(ang_x))
+    print(type(ang_a))
+    
+        
