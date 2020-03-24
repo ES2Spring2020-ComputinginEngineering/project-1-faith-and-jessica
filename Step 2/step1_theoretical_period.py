@@ -44,10 +44,10 @@ def estimatedPeriod(lens):
 # paramter: numpy array of lengths of pendulum and numpy of periods
 # return:   void
 def graphValues(lens, periods):
-    plt.plot(periods, lens, "-bo")
-    plt.ylabel("Length (inches)")
-    plt.xlabel("Period (s)")
-    plt.title("Pendulum Length vs Period")
+    plt.plot(lens, periods, "-bo")
+    plt.xlabel("Length (inches)")
+    plt.ylabel("Period (s)")
+    plt.title("Pendulum Period vs Length")
     plt.show()
 
 # MAIN SCRIPT
