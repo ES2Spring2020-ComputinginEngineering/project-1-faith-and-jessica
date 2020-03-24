@@ -154,6 +154,22 @@ def graphPvL(periods, lengths):
     plt.show()
     
 
+# function: graphLog
+# purpose:  takes an array of lengths and an array of periods of a pendulum 
+#           and graphs the logs of these arrays
+# paramter: numpy array of lengths of pendulum and numpy of periods
+# return:   void
+def graphLog(lens, periods):
+    plt.plot(lens, periods, "-bo")
+    plt.xlabel("Length (inches)")
+    plt.ylabel("Period (s)")
+    plt.title("Pendulum Period vs Length (log scale)")
+    plt.yscale('log')
+    plt.xscale('log')
+    plt.show()
+
+    
+
 # MAIN SCRIPT
 ###################################
 periods = []
@@ -195,3 +211,4 @@ for length in lengths:
     periods = np.append(periods,period)
 
 graphPvL(periods,lengths)
+graphLog(lengths, periods)
