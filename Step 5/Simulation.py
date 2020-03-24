@@ -123,21 +123,20 @@ def graphValues(accs, vels, pos, times):
 # paramter: numpy array of angles and numpy array of times 
 # return:   float (calculated period)
 def calcPeriod(angles, times):
-    periods = np.empty(0, dtype=float)
-    last_p  = 0
+    p_times = []
     
-    for i in range(1,len(angles)):
-        #check conditional
-        if (angles[i-1] > 0 and angles[i] < 0):
-            new_p   = (times[i-1] + times[i])/2
-            periods = np.append(periods, new_p - last_p)
-            last_p  = new_p
-            
-    avg_period = 0
-    for elem in periods:
-        avg_period = avg_period + elem
-
-    return avg_period / len(periods)
+    #just need one period (two data points since simulated)
+    while (len(p_times) < 2):
+        for i in range(1,len(angles)):
+            #check conditional (anytime changes sign)
+            if ((angles[i-1] > 0 and angles[i] < 0) or (angles[i-1] < 0 and angles[i] > 0)):
+                p_times = np.append(p_times,times[i])
+        break   
+    
+    #multiply by 2 to get full period
+    return abs(p_times[1] - p_times[0])*2
+    
+    
 
 
 
@@ -182,9 +181,15 @@ for length in lengths:
     ang_a = ang_a[:30000]
     ang_v = ang_v[:30000]
     ang_x = ang_x[:30000]
-    graphValues(ang_a,ang_v,ang_x,times)
     
-    periods = np.append(periods,calcPeriod(ang_x,times))
-
+    print('****************************************')
+    print()
+    print('Data for pendulum of length ', length)
+ 
+    graphValues(ang_a,ang_v,ang_x,times)
+    period  = calcPeriod(ang_x,times)
+    
+    print('Period: ', period, '(pendulum of length ', length,')')
+    periods = np.append(periods,period)
 
 graphPvL(periods,lengths)
