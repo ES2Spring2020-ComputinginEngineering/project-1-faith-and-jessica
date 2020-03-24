@@ -99,12 +99,14 @@ def normalizeTimes(times):
 # paramter: 4 numpy array of accelerations, velocities, positions, and times
 # return:   void
 def graphValues(accs, vels, pos, times):
+    plt.subplot(211)
     plt.plot(times, accs, "b")
     plt.xlabel("Time (s)")
     plt.ylabel("Angular Accleration (radians/s^2)")
     plt.title("Pendulum Acceleration vs Time")
     plt.show()
     
+    plt.subplot(212)
     plt.plot(times, vels, "r")
     plt.xlabel("Time (s)")
     plt.ylabel("Angular Velocity (radians/sec)")
