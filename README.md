@@ -2,7 +2,7 @@
 Project 1 Starter Code
 
 Names: Faith Seely and Jessica Nordlund
-Team Name: 
+Team Name: Faith and Jessica
 
 Step 2 
   included file(s): step1_theoretical_period.py
