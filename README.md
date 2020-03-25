@@ -13,4 +13,25 @@ Step 3
                     receiver.py
                     
 Step 4
-  included file(s): 
+  included file(s): Step4.py (duplicate of Graphs.py)
+                    Graphs.py
+                    Period.py
+                    Data21.csv
+                    Data17.csv
+                    Data13.csv
+                    Data9.csv
+                    Data475.csv
+                    ( Pendulum21.csv
+                      Pendulum17.csv
+                      Pendulum13.csv
+                      Pendulum9.csv
+                      Pendulum475.csv )
+  file to run to get acceleration and angular position data: Graphs.py
+  file to run to get period data: Period.py
+  
+  *the pendulum.csv files and Step4.py were NOT used in the final version of this project
+  
+ 
+Step 5
+  included file(s): Simulation.py
+  file to run to get simulated data: Simulation.py
